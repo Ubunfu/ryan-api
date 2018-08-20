@@ -1,0 +1,247 @@
+swagger: "2.0"
+info:
+  description: "Ryan API allows you to programatically view information about Ryan. Check out the [ryanallen.ninja](http://ryanallen.ninja) for more information."
+  version: "2.0.0"
+  title: "Ryan API"
+  contact:
+    email: "rallen3882@gmail.com"
+host: "api.ryanallen.ninja"
+basePath: "/"
+tags:
+- name: "General Info"
+  description: "General information about Ryan"
+- name: "Resume"
+  description: "View information from Ryan's resume"
+schemes:
+- "https"
+paths:
+  /info/businesscard:
+    get:
+      tags:
+        - "General Info"
+      summary: "Please, take my card :)"
+      description: "Produces a JSON representation of Ryan's business card."
+      produces: 
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/BusinessCard"
+  /resume/skills:
+    get:
+      tags:
+        - "Resume"
+      summary: "Career-relevant skills"
+      description: "Produces a listing of some of Ryan's most relevant skills."
+      produces: 
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Skills"
+  /resume/experience:
+    get:
+      tags:
+        - "Resume"
+      summary: "Career experience"
+      description: "Produces a listing of some of Ryan's prior career experience."
+      produces: 
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Experience"
+  /resume/education:
+    get:
+      tags:
+        - "Resume"
+      summary: "Educational history"
+      description: "Detail regarding Ryan's educational background."
+      produces: 
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Education"          
+  /resume/certifications:
+    get:
+      tags: 
+        - "Resume"
+      summary: "Certifications"
+      description: "Provides a listing of Ryan's achieved and in-progress certifications"
+      produces:
+        - "application/json"
+      responses:
+        200: 
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Certifications"
+definitions:
+  Certification:
+    type: "object"
+    description: "An achieved or in-progress certification"
+    required:
+      - name
+      - status
+    properties:
+      name:
+        type: "string"
+        example: "Certified Architect"
+      status:
+        type: "string"
+        enum:
+          - "Complete"
+          - "In-Progress"
+      dateAchieved:
+        type: "string"
+        example: "October 9th, 2017"
+  Certifications:
+    type: "array"
+    items:
+      $ref: "#/definitions/Certification"
+  University:
+    type: "object"
+    description: "A single piece of Ryan's educational history."
+    required: 
+      - "institution"
+      - "degree"
+      - "startDate"
+      - "endDate"
+      - "location"
+    properties:
+      institution: 
+        type: "string"
+        description: "Name of educational institution"
+        example: "The University"
+      degree: 
+        type: "string"
+        description: "Degree earned"
+        example: "Bachelor of Science - Computer Science"
+      concentration:
+        type: "string"
+        description: "Specialization within specified major"
+        example: "Network Security"
+      startDate:
+        $ref: "#/definitions/StartDate"
+      endDate:
+        $ref: "#/definitions/EndDate"
+      location:
+        $ref: "#/definitions/Location"
+      educationalDetails:
+        type: "array"
+        description: "List of educational details"
+        items:
+          type: "string"
+          description: "Educational detail line-item"
+          example: "Highy commended senior thesis project"
+      
+  Education:
+    type: "array"
+    description: "List of Ryan's educational background"
+    items:
+      $ref: "#/definitions/University"
+  
+  StartDate:
+    type: "string"
+    example: "January 2016"
+  EndDate:
+    type: "string"
+    example: "December 2017"
+  Experience:
+    type: "array"
+    description: "List of experience"
+    items:
+      $ref: "#/definitions/Job"
+  Job:
+    type: "object"
+    required: 
+      - "employer"
+      - "title"
+      - "startDate"
+      - "endDate"
+      - "location"
+      - "employmentDetails"
+    properties:
+      employer: 
+        $ref: "#/definitions/Employer"
+      title: 
+        $ref: "#/definitions/Title"
+      startDate:
+        $ref: "#/definitions/StartDate"
+      endDate:
+        $ref: "#/definitions/EndDate"
+      location:
+        $ref: "#/definitions/Location"
+      employmentDetails:
+        $ref: "#/definitions/EmploymentDetails"
+        
+  EmploymentDetails:
+    type: "array"
+    description: "List of employment details"
+    items:
+      type: "string"
+      description: "Employment detail line-item"
+      example: "Developed back-end APIs"
+  Skills:
+    type: "array"
+    description: "List of skills"
+    items:
+      type: "string"
+    example: ["OpenAPI Specification", "Node JS", "Amazon Web Services"]
+  FullName: 
+    type: "string"
+    description: "Full Name"
+    example: "John Doe"
+  Title:
+    type: "string"
+    description: "Job Title"
+    example: "Developer"
+  Employer:
+    type: "string"
+    description: "Employing company or entity"
+    example: "The Company"
+  Location:
+    type: "string"
+    description: "Current work location"
+    example: "Detroit, MI, USA"
+  Phone:
+    type: "string"
+    description: "Primary US contact phone number"
+    example: "123.456.7890"
+  Email:
+    type: "string"
+    description: "Primary contact email address"
+    example: "john@mail.com"
+  LinkedIn:
+    type: "string"
+    description: "LinkedIn address"
+    example: "https://www.linkedin.com/in/john-doe/"
+  BusinessCard:
+    type: "object"
+    required: 
+      - "name"
+      - "title"
+      - "employer"
+      - "location"
+      - "phone"
+      - "email"
+      - "linkedIn"
+    properties:
+      name:
+        $ref: "#/definitions/FullName"
+      title:
+        $ref: "#/definitions/Title"
+      employer:
+        $ref: "#/definitions/Employer"
+      location:
+        $ref: "#/definitions/Location"
+      phone:
+        $ref: "#/definitions/Phone"
+      email:
+        $ref: "#/definitions/Email"
+      linkedIn:
+        $ref: "#/definitions/LinkedIn"
