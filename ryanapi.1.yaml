@@ -1,0 +1,349 @@
+swagger: "2.0"
+info:
+  description: "Ryan API allows you to programatically view information about Ryan. Check out [ryanallen.ninja](http://ryanallen.ninja) for more information."
+  version: "2.0.0"
+  title: "Ryan API"
+  contact:
+    email: "rallen3882@gmail.com"
+host: "api.ryanallen.ninja"
+basePath: "/"
+tags:
+  - name: "General Info"
+    description: "General information about Ryan"
+  - name: "Resume"
+    description: "View information from Ryan's resume"
+schemes:
+  - "http"
+paths:
+  /utils/certificate/decode:
+    post:
+      tags:
+        - "Utilities"
+      summary: "Decode PEM Cert"
+      description: "Decode a PEM encoded certificate into JSON."
+      consumes:
+        - "text/plain"
+      produces:
+        - "application/json"
+      parameters: 
+        - in: body
+          name: requestBody
+          description: "Certificate in PEM format."
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/DecodedCert"
+  /info/businesscard:
+    get:
+      tags:
+        - "General Info"
+      summary: "Please, take my card :)"
+      description: "Produces a JSON representation of Ryan's business card."
+      produces: 
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/BusinessCard"
+  /resume/skills:
+    get:
+      tags:
+        - "Resume"
+      summary: "Career-relevant skills"
+      description: "Produces a listing of some of Ryan's most relevant skills."
+      produces: 
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Skills"
+  /resume/experience:
+    get:
+      tags:
+        - "Resume"
+      summary: "Career experience"
+      description: "Produces a listing of some of Ryan's prior career experience."
+      produces: 
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Experience"
+  /resume/education:
+    get:
+      tags:
+        - "Resume"
+      summary: "Educational history"
+      description: "Detail regarding Ryan's educational background."
+      produces: 
+        - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Education"          
+  /resume/certifications:
+    get:
+      tags: 
+        - "Resume"
+      summary: "Certifications"
+      description: "Provides a listing of Ryan's achieved and in-progress certifications"
+      produces:
+        - "application/json"
+      responses:
+        200: 
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Certifications"
+definitions:
+  DecodedCert:
+    type: "object"
+    description: "JSON representation of a certificate"
+    properties:
+      version:
+        type: "integer"
+        example: 2
+      subject:
+        type: "object"
+        properties:
+          countryName:
+            type: "string"
+            example: "US"
+          stateOrProvinceName:
+            type: "string"
+            example: "MI"
+          localityName:
+            type: "string"
+            example: "Foo"
+          organizationalUnitName:
+            type: "string"
+            example: "Foo"
+          commonName:
+            type: "string"
+            example: "*.ryanallen.ninja"
+      issuer:
+        type: "object"
+        properties:
+          countryName:
+            type: "string"
+            example: "US"
+          stateOrProvinceName:
+            type: "string"
+            example: "MI"
+          localityName:
+            type: "string"
+            example: "Foo"
+          organizationalUnitName:
+            type: "string"
+            example: "Foo"
+          commonName:
+            type: "string"
+            example: "*.ryanallen.ninja"
+      serial:
+        type: "string"
+        example: "B88F9D5B2FABC76C"
+      notBefore:
+        type: "string"
+        example: "2013-03-19T15:40:19.000Z"
+      notAfter:
+        type: "string"
+        example: "2013-03-19T15:40:19.000Z"
+      subjectHash:
+        type: "string"
+        example: "7e4ec36f"
+      signatureAlgorithm:
+        type: "string"
+        example: "sha1WithRSAEncryption"
+      fingerPrint:
+        type: "string"
+        example: "42:DA:9C:F8:F1:2D:70:58:2D:97:B9:37:E0:9E:66:7C:83:A9:A0:E4"
+      publicKey:
+        type: "object"
+        properties:
+          algorithm: 
+            type: "string"
+            example: "rsaEncryption"
+          e: 
+            type: "string"
+            example: "65537"
+          n:
+            type: "string"
+            example: "CDD19FC62F4235B31FD5451CBC3421ECC6013AF7881F27341342886E18CAE45902054E02899ADB7C76A0696ED911C374B6DDC4BE96CE331C5CFD9414D9637FB3FC0FC69874A527EC7C5B1328CE11853583DAFE1F824FB166229DD69D3E2F8853B69C27130D2E5D155DD248BA9AEC15E72FCFFB914751E95DABEA604DC833B8AF"
+          bitSize:
+            type: "number"
+            example: 1024
+      altNames:
+        type: "array"
+        items:
+          type: "string"
+          example: "docs.ryanallen.ninja"
+      extensions:
+        type: "object"
+  Certification:
+    type: "object"
+    description: "An achieved or in-progress certification"
+    required:
+      - "name"
+      - "status"
+    properties:
+      name:
+        type: "string"
+        example: "Certified Architect"
+      status:
+        type: "string"
+        enum:
+          - "Complete"
+          - "In-Progress"
+      dateAchieved:
+        type: "string"
+        example: "October 9th, 2017"
+  Certifications:
+    type: "array"
+    items:
+      $ref: "#/definitions/Certification"
+  University:
+    type: "object"
+    description: "A single piece of Ryan's educational history."
+    required: 
+      - "institution"
+      - "degree"
+      - "startDate"
+      - "endDate"
+      - "location"
+    properties:
+      institution: 
+        type: "string"
+        description: "Name of educational institution"
+        example: "The University"
+      degree: 
+        type: "string"
+        description: "Degree earned"
+        example: "Bachelor of Science - Computer Science"
+      concentration:
+        type: "string"
+        description: "Specialization within specified major"
+        example: "Network Security"
+      startDate:
+        $ref: "#/definitions/StartDate"
+      endDate:
+        $ref: "#/definitions/EndDate"
+      location:
+        $ref: "#/definitions/Location"
+      educationalDetails:
+        type: "array"
+        description: "List of educational details"
+        items:
+          type: "string"
+          description: "Educational detail line-item"
+          example: "Highy commended senior thesis project"
+      
+  Education:
+    type: "array"
+    description: "List of Ryan's educational background"
+    items:
+      $ref: "#/definitions/University"
+  
+  StartDate:
+    type: "string"
+    example: "January 2016"
+  EndDate:
+    type: "string"
+    example: "December 2017"
+  Experience:
+    type: "array"
+    description: "List of experience"
+    items:
+      $ref: "#/definitions/Job"
+  Job:
+    type: "object"
+    required: 
+      - "employer"
+      - "title"
+      - "startDate"
+      - "endDate"
+      - "location"
+      - "employmentDetails"
+    properties:
+      employer: 
+        $ref: "#/definitions/Employer"
+      title: 
+        $ref: "#/definitions/Title"
+      startDate:
+        $ref: "#/definitions/StartDate"
+      endDate:
+        $ref: "#/definitions/EndDate"
+      location:
+        $ref: "#/definitions/Location"
+      employmentDetails:
+        $ref: "#/definitions/EmploymentDetails"
+        
+  EmploymentDetails:
+    type: "array"
+    description: "List of employment details"
+    items:
+      type: "string"
+      description: "Employment detail line-item"
+      example: "Developed back-end APIs"
+  Skills:
+    type: "array"
+    description: "List of skills"
+    items:
+      type: "string"
+    example: ["OpenAPI Specification", "Node JS", "Amazon Web Services"]
+  FullName: 
+    type: "string"
+    description: "Full Name"
+    example: "John Doe"
+  Title:
+    type: "string"
+    description: "Job Title"
+    example: "Developer"
+  Employer:
+    type: "string"
+    description: "Employing company or entity"
+    example: "The Company"
+  Location:
+    type: "string"
+    description: "Current work location"
+    example: "Detroit, MI, USA"
+  Phone:
+    type: "string"
+    description: "Primary US contact phone number"
+    example: "123.456.7890"
+  Email:
+    type: "string"
+    description: "Primary contact email address"
+    example: "john@mail.com"
+  LinkedIn:
+    type: "string"
+    description: "LinkedIn address"
+    example: "https://www.linkedin.com/in/john-doe/"
+  BusinessCard:
+    type: "object"
+    required: 
+      - "name"
+      - "title"
+      - "employer"
+      - "location"
+      - "phone"
+      - "email"
+      - "linkedIn"
+    properties:
+      name:
+        $ref: "#/definitions/FullName"
+      title:
+        $ref: "#/definitions/Title"
+      employer:
+        $ref: "#/definitions/Employer"
+      location:
+        $ref: "#/definitions/Location"
+      phone:
+        $ref: "#/definitions/Phone"
+      email:
+        $ref: "#/definitions/Email"
+      linkedIn:
+        $ref: "#/definitions/LinkedIn"
