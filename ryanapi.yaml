@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "Ryan API allows you to programatically view information about Ryan. Check out the [ryanallen.ninja](http://ryanallen.ninja) for more information."
+  description: "Ryan API allows you to programatically view information about Ryan. Check out [ryanallen.ninja](http://ryanallen.ninja) for more information."
   version: "2.0.0"
   title: "Ryan API"
   contact:
@@ -8,13 +8,32 @@ info:
 host: "api.ryanallen.ninja"
 basePath: "/"
 tags:
-- name: "General Info"
-  description: "General information about Ryan"
-- name: "Resume"
-  description: "View information from Ryan's resume"
+  - name: "General Info"
+    description: "General information about Ryan"
+  - name: "Resume"
+    description: "View information from Ryan's resume"
 schemes:
-- "https"
+  - "http"
 paths:
+  /utils/certificate/decode:
+    post:
+      tags:
+        - "Utilities"
+      summary: "Decode PEM Cert"
+      description: "Decode a PEM encoded certificate into JSON."
+      consumes:
+        - "text/plain"
+      produces:
+        - "application/json"
+      parameters: 
+        - in: body
+          name: requestBody
+          description: "Certificate in PEM format."
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/DecodedCert"
   /info/businesscard:
     get:
       tags:
@@ -81,12 +100,95 @@ paths:
           schema:
             $ref: "#/definitions/Certifications"
 definitions:
+  DecodedCert:
+    type: "object"
+    description: "JSON representation of a certificate"
+    properties:
+      version:
+        type: "integer"
+        example: 2
+      subject:
+        type: "object"
+        properties:
+          countryName:
+            type: "string"
+            example: "US"
+          stateOrProvinceName:
+            type: "string"
+            example: "MI"
+          localityName:
+            type: "string"
+            example: "Foo"
+          organizationalUnitName:
+            type: "string"
+            example: "Foo"
+          commonName:
+            type: "string"
+            example: "*.ryanallen.ninja"
+      issuer:
+        type: "object"
+        properties:
+          countryName:
+            type: "string"
+            example: "US"
+          stateOrProvinceName:
+            type: "string"
+            example: "MI"
+          localityName:
+            type: "string"
+            example: "Foo"
+          organizationalUnitName:
+            type: "string"
+            example: "Foo"
+          commonName:
+            type: "string"
+            example: "*.ryanallen.ninja"
+      serial:
+        type: "string"
+        example: "B88F9D5B2FABC76C"
+      notBefore:
+        type: "string"
+        example: "2013-03-19T15:40:19.000Z"
+      notAfter:
+        type: "string"
+        example: "2013-03-19T15:40:19.000Z"
+      subjectHash:
+        type: "string"
+        example: "7e4ec36f"
+      signatureAlgorithm:
+        type: "string"
+        example: "sha1WithRSAEncryption"
+      fingerPrint:
+        type: "string"
+        example: "42:DA:9C:F8:F1:2D:70:58:2D:97:B9:37:E0:9E:66:7C:83:A9:A0:E4"
+      publicKey:
+        type: "object"
+        properties:
+          algorithm: 
+            type: "string"
+            example: "rsaEncryption"
+          e: 
+            type: "string"
+            example: "65537"
+          n:
+            type: "string"
+            example: "CDD19FC62F4235B31FD5451CBC3421ECC6013AF7881F27341342886E18CAE45902054E02899ADB7C76A0696ED911C374B6DDC4BE96CE331C5CFD9414D9637FB3FC0FC69874A527EC7C5B1328CE11853583DAFE1F824FB166229DD69D3E2F8853B69C27130D2E5D155DD248BA9AEC15E72FCFFB914751E95DABEA604DC833B8AF"
+          bitSize:
+            type: "number"
+            example: 1024
+      altNames:
+        type: "array"
+        items:
+          type: "string"
+          example: "docs.ryanallen.ninja"
+      extensions:
+        type: "object"
   Certification:
     type: "object"
     description: "An achieved or in-progress certification"
     required:
-      - name
-      - status
+      - "name"
+      - "status"
     properties:
       name:
         type: "string"
