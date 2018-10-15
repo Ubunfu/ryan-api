@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "Ryan API allows you to programatically view information about Ryan. Check out [ryanallen.ninja](http://ryanallen.ninja) for more information."
-  version: "2.0.0"
+  version: "2.1.0"
   title: "Ryan API"
   contact:
     email: "rallen3882@gmail.com"
@@ -320,6 +320,10 @@ definitions:
     type: "string"
     description: "LinkedIn address"
     example: "https://www.linkedin.com/in/john-doe/"
+  github:
+    type: "string"
+    description: "GitHub Page"
+    example: "https://www.github.com/Ubunfu/"
   BusinessCard:
     type: "object"
     required: 
@@ -330,6 +334,7 @@ definitions:
       - "phone"
       - "email"
       - "linkedIn"
+      - "github"
     properties:
       name:
         $ref: "#/definitions/FullName"
@@ -345,6 +350,8 @@ definitions:
         $ref: "#/definitions/Email"
       linkedIn:
         $ref: "#/definitions/LinkedIn"
+      github:
+        $ref: "#/definitions/github"
   EncodedCertPEM:
     type: "string"
     example: |
